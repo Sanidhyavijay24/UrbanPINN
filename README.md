@@ -1,4 +1,4 @@
-# Urban Micro-Climate PINN (Physics-Informed Neural Network)
+# UrbanPINN (Physics-Informed Neural Network)
 
 ## Project Overview
 
