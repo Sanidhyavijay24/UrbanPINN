@@ -1,4 +1,9 @@
-# UrbanPINN (Physics-Informed Neural Network)
+# 🏙️ UrbanPINN (Physics-Informed Neural Network)
+
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![Architecture](https://img.shields.io/badge/Architecture-SIREN-blueviolet?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
 ## Project Overview
 
@@ -9,29 +14,20 @@ This project implements a **Physics-Informed Neural Network (PINN)** for simulat
 
 ---
 
-## Problem Statement: Zero-Velocity Collapse
+## Applications & Use Cases
 
-### Original Issue
-The initial PINN implementations (V1, V2) suffered from **zero-velocity collapse** - a common failure mode where the neural network learns to output zero velocity everywhere. This is a trivial solution that satisfies:
-- Continuity equation: ∇·V = 0 ✓ (trivially satisfied)
-- Momentum equations: Becomes 0 = -∇p (satisfied with constant pressure)
-- No-slip BCs on buildings: V = 0 ✓ (trivially satisfied)
-
-### Root Causes Identified
-| Problem | Impact |
-|---------|--------|
-| Tanh activation saturation | Gradients vanish for large inputs |
-| Missing pressure gradient forcing | No driving force for wind |
-| No inlet velocity boundary condition | Network has no non-trivial target |
-| Insufficient building penetration penalty | Weak enforcement of solid boundaries |
+- **Urban Corridor Planning:** Evaluate the impact of complex building configurations on wind pathways and urban airflow.
+- **Pedestrian Comfort Analysis:** Identify potentially hazardous or uncomfortable high-speed wake zones and channeling effects at street levels.
+- **Pollutant Dispersion:** Predict areas of low wind circulation where vehicular emissions or other urban pollutants might gather and accumulate over time.
+- **Energy Optimization:** Assist in natural ventilation design and local weather-based cooling load estimations for tall building blocks.
 
 ---
 
-## Solution: V3 Architecture
+## Key Model Features
 
 ### 1. SIREN Architecture (Sinusoidal Representation Networks)
 
-Replaced Tanh activation with **periodic sine activations**:
+The model utilizes **periodic sine activations** internally:
 
 ```python
 # SIREN activation
@@ -311,18 +307,15 @@ python -m wind_module.visualize [options]
 
 ---
 
-## Key Observations
+## Key Architectural Insights
 
-### Why SIREN Works Better Than Tanh
-1. **No saturation:** sin(x) oscillates forever, gradients never vanish
-2. **Frequency control:** ω₀ parameter controls spatial resolution
-3. **Natural periodicity:** Better captures repeating urban geometry patterns
+### The Choice of SIREN
+1. **Continuous Gradients:** sin(x) continuously oscillates, ensuring derived physics gradients natively required by Navier-Stokes calculations never vanish.
+2. **Frequency control:** The ω₀ parameter closely controls spatial resolution resolving high frequency dynamics accurately.
+3. **Natural periodicity:** Successfully captures repetitively scaled and complex solid building geometries common to urban layouts.
 
-### Importance of Pressure Forcing
-Without explicit pressure BCs, the network has no incentive to create flow. The 100 Pa gradient provides the "driving force" that makes u ≈ 0 an unstable solution.
-
-### Building Penetration Penalty
-Even with no-slip BCs on building surfaces, the interior can have arbitrary velocity. The penetration penalty explicitly forces V → 0 inside solid regions.
+### Fluid Dynamic Boundaries
+Explicit pressure gradients actively steer the airflow field boundaries. Alongside these, imposing strict energy boundaries forbidding flow penetration explicitly enforces realistic dynamic wind currents across the terrain structure.
 
 ### Street-Level Wake Zones
 The ~30% zero-velocity fraction at z=5m is **physically realistic** - urban canyons create:
@@ -359,7 +352,7 @@ The ~30% zero-velocity fraction at z=5m is **physically realistic** - urban cany
 
 ## Software Dependencies
 
-```
+```text
 torch >= 2.0
 numpy
 matplotlib
@@ -369,6 +362,22 @@ shapely
 
 ---
 
+## 🤝 Contributing
+
+Contributions are always welcome! If you're interested in implementing features from our `future_improvements.md` (like Turbulence Modeling or Boussinesq approximations), please open an issue first to discuss your approach.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
 *Documentation generated: February 5, 2026*
-*Model version: V3 (SIREN)*
+*Model Architecture: Urban PINN (SIREN)*
 *Training: 2000 epochs, lr=5×10⁻⁴*
