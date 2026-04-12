@@ -375,9 +375,3 @@ Contributions are always welcome! If you're interested in implementing features 
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-*Documentation generated: February 5, 2026*
-*Model Architecture: Urban PINN (SIREN)*
-*Training: 2000 epochs, lr=5×10⁻⁴*
