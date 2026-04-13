@@ -25,7 +25,7 @@ export function Scene({ windData, sliceHeight }: SceneProps) {
       >
         <PerspectiveCamera
           makeDefault
-          position={[0, 900, 500]}
+          position={[0, 1400, 800]}
           fov={45}
           near={1}
           far={5000}
@@ -35,7 +35,7 @@ export function Scene({ windData, sliceHeight }: SceneProps) {
           enablePan={true}
           minDistance={100}
           maxDistance={3000}
-          target={[0, 0, -250]} // Offsets the center of rotation so the map doesn't hide under the top HUD
+          target={[-60, 0, -70]} // Aims exactly at the physical center of the building dataset geometry
           maxPolarAngle={Math.PI / 2 + 0.1} // Allows slightly looking up from ground
         />
         
