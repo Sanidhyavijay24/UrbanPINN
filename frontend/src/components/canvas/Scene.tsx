@@ -6,6 +6,7 @@ import { Buildings } from './Buildings';
 import { WindField } from './WindField';
 import { ThermalMap } from './ThermalMap';
 import { VelocityPoint } from '@/lib/api-client';
+import { useState, useEffect } from 'react';
 
 interface SceneProps {
   windData: VelocityPoint[];
@@ -13,6 +14,15 @@ interface SceneProps {
 }
 
 export function Scene({ windData, sliceHeight }: SceneProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize(); // Execute on initial mount
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className="absolute inset-0 w-full h-full bg-space-950">
       <Canvas
@@ -25,10 +35,10 @@ export function Scene({ windData, sliceHeight }: SceneProps) {
       >
         <PerspectiveCamera
           makeDefault
-          position={[0, 1400, 800]}
-          fov={45}
+          position={isMobile ? [0, 2800, 1800] : [0, 1400, 800]}
+          fov={isMobile ? 55 : 45}
           near={1}
-          far={5000}
+          far={10000}
         />
         
         <OrbitControls
