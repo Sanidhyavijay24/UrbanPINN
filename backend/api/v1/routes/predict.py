@@ -40,15 +40,19 @@ class SliceResponse(BaseModel):
     domain_bounds: Dict[str, float]
     statistics: Dict[str, float]
 
+# Store previously generated prediction matrices in RAM instantly bypassing PyTorch
+_prediction_cache: Dict[str, SliceResponse] = {}
+
 # Since limiter is attached to app state, we have to fetch it through dependency or request
 @router.post("/slice", response_model=SliceResponse)
 async def predict_slice(request: Request, body: SliceRequest, model_loader=Depends(get_model)):
-    # Note: If we use @limiter.limit("10/minute"), we need to pass Request object explicitly.
-    # To keep it simple, we retrieve the limiter from app context if configured
-    limiter = request.app.state.limiter
-    if getattr(limiter, "limit", None) is not None:
-        # manual rate limit evaluation is complex directly inside route without decorator
-        pass 
+    # manual rate limit evaluation is complex directly inside route without decorator
+    pass 
+    
+    # 1. Instant Cache Bypass (Ultra-Fast)
+    cache_key = f"{body.z_height}_{body.grid_resolution}"
+    if cache_key in _prediction_cache:
+        return _prediction_cache[cache_key]
         
     try:
         x = np.linspace(-632, 512, body.grid_resolution)
@@ -76,7 +80,7 @@ async def predict_slice(request: Request, body: SliceRequest, model_loader=Depen
             in zip(X.flatten(), Y.flatten(), Z.flatten(), u, v, w, p, T, magnitude)
         ]
         
-        return SliceResponse(
+        response = SliceResponse(
             data=data_points,
             grid_shape=(body.grid_resolution, body.grid_resolution),
             z_height=body.z_height,
@@ -92,5 +96,9 @@ async def predict_slice(request: Request, body: SliceRequest, model_loader=Depen
                 "pressure_gradient": float(p.max() - p.min())
             }
         )
+        
+        # 2. Store it for the next user!
+        _prediction_cache[cache_key] = response
+        return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
