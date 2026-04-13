@@ -45,9 +45,7 @@ _prediction_cache: Dict[str, SliceResponse] = {}
 
 # Since limiter is attached to app state, we have to fetch it through dependency or request
 @router.post("/slice", response_model=SliceResponse)
-async def predict_slice(request: Request, body: SliceRequest, model_loader=Depends(get_model)):
-    # manual rate limit evaluation is complex directly inside route without decorator
-    pass 
+async def predict_slice(body: SliceRequest, model_loader=Depends(get_model)):
     
     # 1. Instant Cache Bypass (Ultra-Fast)
     cache_key = f"{body.z_height}_{body.grid_resolution}"
