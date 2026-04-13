@@ -22,3 +22,11 @@ Thumbs.db
 
 # Project Ledger
 context.md
+# Data/ML Caches
+*.npy
+results/
+results/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+

@@ -1,0 +1,17 @@
+# Machine Learning & Scientific Computing
+torch>=2.0
+numpy
+geopandas
+shapely
+trimesh[easy]
+
+# API Layer (FastAPI)
+fastapi>=0.103.0
+uvicorn[standard]>=0.23.0
+pydantic>=2.0
+
+# Security & Middleware
+slowapi>=0.1.8
+
+# Data formatting
+dracoPy # For glTF draco mesh mapping

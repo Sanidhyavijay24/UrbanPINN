@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+:root {
+  /* Base Theme: Deep Space Noir */
+  --space-950: #030712;
+  --space-900: #0f172a;
+  --space-800: #1e293b;
+  --space-700: #334155;
+
+  /* Velocity Gradients */
+  --velocity-0:   #0c0d1b;
+  --velocity-20:  #1a1f4d;
+  --velocity-40:  #2563eb;
+  --velocity-60:  #06b6d4;
+  --velocity-80:  #14f195;
+  --velocity-100: #fbbf24;
+
+  /* Semantic */
+  --danger: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(148, 163, 184, 0.15);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  --glass-blur: blur(12px);
+
+  /* Animation */
+  --ease-wind: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@theme inline {
+  --color-space-950: var(--space-950);
+  --color-space-900: var(--space-900);
+  --color-space-800: var(--space-800);
+  --color-space-700: var(--space-700);
+
+  --color-velocity-0: var(--velocity-0);
+  --color-velocity-20: var(--velocity-20);
+  --color-velocity-40: var(--velocity-40);
+  --color-velocity-60: var(--velocity-60);
+  --color-velocity-80: var(--velocity-80);
+  --color-velocity-100: var(--velocity-100);
+
+  --animate-float: float 3s var(--ease-wind) infinite;
+}
+
+body {
+  background: var(--space-950);
+  color: #ededed;
+  overflow: hidden; /* Prevent scrolling, 100vh 3D canvas */
+}
+
+/* Glass Components */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: 
+    var(--glass-shadow),
+    inset 0 0 20px rgba(148, 163, 184, 0.05);
+}
+
+.glass-elevated {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 
+    0 12px 48px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
