@@ -25,8 +25,10 @@ export default function SimulationPage() {
     return { peakGust: tempMaxV, minTemp: tempMinT, maxTemp: tempMaxT };
   }, [windData]);
   
-  // Basic naive fetcher before we implement robust React Query next
+  // Debounced fetcher to prevent overwhelming the remote Cloud CPU
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
     async function fetchSlice() {
       setLoading(true);
       try {
@@ -48,7 +50,12 @@ export default function SimulationPage() {
       }
     }
     
-    fetchSlice();
+    // Smooth 300ms debounce so we don't bombard the Render Free Tier with 50 requests a second
+    timeoutId = setTimeout(() => {
+      fetchSlice();
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
   }, [sliceHeight]);
 
   return (
