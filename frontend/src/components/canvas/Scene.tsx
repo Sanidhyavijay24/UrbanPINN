@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Grid, EffectComposer, Bloom } from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera, Grid } from '@react-three/drei';
 import { Buildings } from './Buildings';
 import { WindField } from './WindField';
 import { ThermalMap } from './ThermalMap';
