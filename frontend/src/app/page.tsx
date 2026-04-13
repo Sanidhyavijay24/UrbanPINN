@@ -62,16 +62,16 @@ export default function SimulationPage() {
     <main className="relative w-screen h-screen overflow-hidden bg-space-950">
       <Scene windData={windData} sliceHeight={sliceHeight} />
       
-      {/* Temporary basic HUD layout for testing */}
-      <div className="absolute top-6 left-6 glass-elevated p-6 w-80 z-10 flex flex-col gap-6 text-white">
+      {/* Responsive mobile scaling HUD layout */}
+      <div className="absolute top-3 left-3 md:top-6 md:left-6 glass-elevated p-4 md:p-6 w-[calc(100vw-24px)] md:w-80 z-10 flex flex-col gap-3 md:gap-6 text-white">
         <div>
-          <h1 className="text-xl font-bold font-sans tracking-wide">URBAN PINN</h1>
-          <p className="text-sm text-space-400">Micro-climate CFD Simulator</p>
+          <h1 className="text-lg md:text-xl font-bold font-sans tracking-wide">URBAN PINN</h1>
+          <p className="text-xs md:text-sm text-space-400">Micro-climate CFD Simulator</p>
         </div>
         
         <div className="flex flex-col gap-2">
-          <label className="text-xs uppercase tracking-widest text-space-300 font-bold">
-            Slice Height: <span className="text-velocity-60 text-lg ml-2">{sliceHeight}m</span>
+          <label className="text-[10px] md:text-xs uppercase tracking-widest text-space-300 font-bold">
+            Slice Height: <span className="text-velocity-60 text-base md:text-lg ml-2">{sliceHeight}m</span>
           </label>
             <input 
               type="range" 
@@ -80,30 +80,30 @@ export default function SimulationPage() {
               step="5"
               value={sliceHeight}
               onChange={(e) => setSliceHeight(parseInt(e.target.value))}
-              className="w-full h-2 bg-space-800 rounded-lg appearance-none cursor-pointer"
+              className="w-full h-1.5 md:h-2 bg-space-800 rounded-lg appearance-none cursor-pointer"
             />
             
             {/* Velocity Spectrum Legend */}
-            <div className="pt-5 mt-2 border-t border-space-800/80">
-              <div className="flex justify-between items-center text-[11px] font-bold text-space-400 uppercase tracking-widest mb-2">
+            <div className="pt-3 md:pt-5 mt-1 md:mt-2 border-t border-space-800/80">
+              <div className="flex justify-between items-center text-[9px] md:text-[11px] font-bold text-space-400 uppercase tracking-widest mb-1 md:mb-2">
                 <span>Velocity Spectrum</span>
                 <span>Peak: {peakGust.toFixed(1)} m/s</span>
               </div>
-              <div className="h-2 w-full rounded-full bg-gradient-to-r from-sky-500 via-emerald-400 via-yellow-400 to-red-500 shadow-[0_0_10px_rgba(16,185,129,0.2)]"></div>
-              <div className="flex justify-between text-[10px] text-space-500 font-mono mt-2">
+              <div className="h-1.5 md:h-2 w-full rounded-full bg-gradient-to-r from-sky-500 via-emerald-400 via-yellow-400 to-red-500 shadow-[0_0_10px_rgba(16,185,129,0.2)]"></div>
+              <div className="flex justify-between text-[8px] md:text-[10px] text-space-500 font-mono mt-1 md:mt-2">
                 <span>0.0</span>
                 <span>Local Max</span>
               </div>
             </div>
 
             {/* Thermal Temperature Legend */}
-            <div className="pt-4 mt-2">
-              <div className="flex justify-between items-center text-[11px] font-bold text-space-400 uppercase tracking-widest mb-2">
+            <div className="pt-2 md:pt-4 mt-1 md:mt-2">
+              <div className="flex justify-between items-center text-[9px] md:text-[11px] font-bold text-space-400 uppercase tracking-widest mb-1 md:mb-2">
                 <span>Ambient Thermal</span>
                 <span className="text-red-400">Max: {maxTemp !== -Infinity ? maxTemp.toFixed(1) : "0.0"}°</span>
               </div>
-              <div className="h-2 w-full rounded-full bg-gradient-to-r from-blue-600 via-purple-500 via-red-500 via-yellow-400 to-white shadow-[0_0_10px_rgba(138,43,226,0.2)]"></div>
-              <div className="flex justify-between text-[10px] text-space-500 font-mono mt-2">
+              <div className="h-1.5 md:h-2 w-full rounded-full bg-gradient-to-r from-blue-600 via-purple-500 via-red-500 via-yellow-400 to-white shadow-[0_0_10px_rgba(138,43,226,0.2)]"></div>
+              <div className="flex justify-between text-[8px] md:text-[10px] text-space-500 font-mono mt-1 md:mt-2">
                 <span className="text-blue-400">{minTemp !== Infinity ? minTemp.toFixed(1) : "0.0"}°</span>
                 <span>Hot</span>
               </div>
