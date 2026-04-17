@@ -33,7 +33,7 @@ export function MetricsHUD({ data }: MetricsHUDProps) {
   if (!stats) return null;
 
   return (
-    <div className="absolute bottom-8 left-2 md:bottom-6 md:left-6 glass-panel p-2.5 md:p-4 flex gap-1 md:gap-6 text-white z-10 w-[calc(100vw-16px)] md:w-auto rounded-xl justify-between md:justify-start">
+    <div className="glass-panel p-2.5 md:p-4 flex gap-1 md:gap-6 text-white z-10 md:w-auto rounded-xl justify-between md:justify-start">
       <div className="flex flex-col">
         <span className="text-[9px] md:text-xs uppercase text-space-400 font-bold tracking-wider">Mean Velocity</span>
         <span className="text-base md:text-2xl font-mono text-velocity-40 font-bold">
