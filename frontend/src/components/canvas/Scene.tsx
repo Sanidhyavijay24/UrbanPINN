@@ -2,6 +2,7 @@
 
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, Grid } from '@react-three/drei';
+import { Suspense } from 'react';
 import { Buildings } from './Buildings';
 import { WindField } from './WindField';
 import { ThermalMap } from './ThermalMap';
@@ -35,8 +36,8 @@ export function Scene({ windData, sliceHeight }: SceneProps) {
       >
         <PerspectiveCamera
           makeDefault
-          position={isMobile ? [0, 2800, 1800] : [0, 1400, 800]}
-          fov={isMobile ? 55 : 45}
+          position={isMobile ? [0, 1600, 1000] : [0, 1400, 800]}
+          fov={isMobile ? 50 : 45}
           near={1}
           far={10000}
         />
@@ -69,13 +70,15 @@ export function Scene({ windData, sliceHeight }: SceneProps) {
           fadeStrength={1}
         />
         
-        <Buildings />
+        <Suspense fallback={null}>
+          <Buildings />
+        </Suspense>
         
         {windData.length > 0 && (
-          <>
+          <Suspense fallback={null}>
             <ThermalMap data={windData} />
             <WindField data={windData} height={sliceHeight} />
-          </>
+          </Suspense>
         )}
         
       </Canvas>

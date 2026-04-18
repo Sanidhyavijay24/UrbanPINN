@@ -54,8 +54,14 @@ body {
   background-size: 80px 80px;
   background-attachment: fixed;
   color: #ededed;
-  overflow: hidden;
-  /* Prevent scrolling, 100vh 3D canvas */
+  overflow-x: hidden;
+}
+
+/* Lock scroll on desktop (fixed layout), allow on mobile (stacked layout) */
+@media (min-width: 768px) {
+  body {
+    overflow: hidden;
+  }
 }
 
 /* Glass Components */

@@ -60,40 +60,79 @@ export default function SimulationPage() {
   }, [sliceHeight]);
 
   return (
-    <main className="relative min-h-[100dvh] w-screen overflow-x-hidden pt-6 md:pt-10 selection:bg-amber-500/30 font-body">
-      {/* 
-        ========================================
-        LEFT COLUMN: HERO TEXT & INSIGHTS 
-        ========================================
-      */}
-      <div className={`fixed top-2 md:top-4 left-0 pl-6 md:pl-10 lg:pl-12 pr-8 w-full md:w-[50%] lg:w-[45%] transition-opacity duration-700 ${isFullscreen ? 'opacity-60 pointer-events-none blur-sm' : 'opacity-100'}`}>
+    <main className="relative min-h-[100dvh] w-screen overflow-x-hidden selection:bg-amber-500/30 font-body">
+
+      {/* =============================================
+          MOBILE LAYOUT (scrollable, stacked)
+          ============================================= */}
+      <div className={`md:hidden flex flex-col px-5 pt-4 pb-16 gap-6 transition-opacity duration-500 ${isFullscreen ? 'opacity-30 pointer-events-none blur-sm' : 'opacity-100'}`}>
+        {/* Mobile Heading */}
+        <div className="relative">
+          <div className="absolute -top-10 -left-10 w-48 h-48 bg-amber-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+          <h1 className="text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-space-500 pb-1 relative">
+            URBAN<br />PINN.
+          </h1>
+          <p className="text-[9px] uppercase tracking-[0.3em] text-amber-500/60 font-mono mt-1 relative">Micro-Climate CFD Simulator</p>
+        </div>
+
+        {/* Mobile Simulation Window */}
+        <div
+          className="relative w-full aspect-square rounded-xl bg-space-950/40 backdrop-blur-md border border-white/10 overflow-hidden group"
+        >
+          <Scene windData={windData} sliceHeight={sliceHeight} />
+          <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 z-30 bg-gradient-to-t from-space-950/80 via-transparent to-space-950/30">
+            <div className="flex justify-between items-start">
+              <div className="space-y-0.5">
+                <p className="text-[8px] uppercase tracking-[0.2em] text-amber-500 font-bold">Simulation Active</p>
+                <h3 className="text-white font-bold text-xs">Manhattan Grid Inference</h3>
+              </div>
+              {/* Tap to Explore — top right */}
+              <button
+                onClick={() => setIsFullscreen(true)}
+                className="bg-amber-500/20 text-amber-500 border border-amber-500/50 px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest backdrop-blur-md pointer-events-auto shadow-lg"
+              >
+                Tap to Explore
+              </button>
+            </div>
+            <div className="flex justify-between text-[8px] text-gray-300 font-mono">
+              <span>LAT: 40.7128° N</span>
+              <span>LONG: 74.0060° W</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Insights — all 5 */}
+        <InsightsList start={0} end={5} />
+      </div>
+
+      {/* =============================================
+          DESKTOP LAYOUT (fixed split-screen)
+          ============================================= */}
+      {/* Left column — fixed on desktop only */}
+      <div className={`hidden md:block fixed top-4 left-0 pl-10 lg:pl-12 pr-8 w-[50%] lg:w-[45%] transition-opacity duration-700 ${isFullscreen ? 'opacity-60 pointer-events-none blur-sm' : 'opacity-100'}`}>
         <div className="flex flex-col items-start space-y-6">
           <div className="relative">
             {/* Ambient glow */}
             <div className="absolute -top-16 -left-16 w-72 h-72 bg-amber-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-space-500 pb-2 relative">
+            <h1 className="text-7xl lg:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-space-500 pb-2 relative">
               URBAN<br />PINN.
             </h1>
-            <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-amber-500/60 font-mono mt-2 relative">Micro-Climate CFD Simulator</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-amber-500/60 font-mono mt-2 relative">Micro-Climate CFD Simulator</p>
           </div>
           <InsightsList start={0} end={4} />
         </div>
       </div>
 
-      {/* 
-        ========================================
-        RIGHT COLUMN / FULLSCREEN SIMULATION 
-        ========================================
-      */}
+      {/* Right column — simulation container (desktop only in mini mode) */}
       <div
-        className={`fixed overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${isFullscreen
+        className={`hidden md:block fixed overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${isFullscreen
             ? 'inset-4 md:inset-12 lg:inset-16 z-50 rounded-2xl bg-space-950/90 backdrop-blur-3xl border border-white/10 shadow-[0_0_100px_rgba(0,0,0,1)]'
-            : 'top-8 right-8 w-full max-w-sm md:max-w-md lg:max-w-[45%] aspect-[4/3] rounded-xl bg-space-950/40 backdrop-blur-md hover:border-amber-400/50 shadow-2xl z-20 group border border-white/10'
+            : 'top-8 right-8 max-w-md lg:max-w-[45%] w-full aspect-[4/3] rounded-xl bg-space-950/40 backdrop-blur-md hover:border-amber-400/50 shadow-2xl z-20 group border border-white/10'
           }`}
       >
         <Scene windData={windData} sliceHeight={sliceHeight} />
 
-        {/* If Not Fullscreen: Reading Mode Mini-HUD Overlay */}
+        {/* Mini-HUD Overlay (reading mode) */}
         {!isFullscreen && (
           <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-5 z-30 bg-gradient-to-t from-space-950/80 via-transparent to-space-950/30">
             <div className="flex justify-between items-start opacity-70 group-hover:opacity-100 transition-opacity">
@@ -122,7 +161,7 @@ export default function SimulationPage() {
           </div>
         )}
 
-        {/* If Fullscreen: The Full Interactive Controls */}
+        {/* Fullscreen Controls */}
         <div className={`absolute top-6 left-6 transition-all duration-700 delay-100 ${isFullscreen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
           <div className="glass-elevated p-6 w-80 flex flex-col gap-6 text-white border-white/5">
             <div className="flex justify-between items-center bg-black/20 -m-6 mb-2 p-6 border-b border-white/10 rounded-t-2xl">
@@ -198,11 +237,79 @@ export default function SimulationPage() {
         )}
       </div>
 
-      {/* 5th Insight — Positioned below the simulation window on the right */}
-      <div className={`fixed top-[calc(8px+75vh+32px)] right-8 w-full max-w-sm md:max-w-md lg:max-w-[45%] z-10 transition-opacity duration-700 ${isFullscreen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      {/* 5th Insight — below simulation on desktop only */}
+      <div className={`hidden md:block fixed top-[calc(8px+75vh+32px)] right-8 max-w-md lg:max-w-[45%] w-full z-10 transition-opacity duration-700 ${isFullscreen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <InsightsList start={4} end={5} />
       </div>
+
+      {/* Mobile fullscreen simulation overlay */}
+      {isFullscreen && (
+        <div className="md:hidden fixed inset-0 z-50 bg-space-950">
+          <Scene windData={windData} sliceHeight={sliceHeight} />
+
+          {/* Top bar — compact: title + minimize + slider only */}
+          <div className="absolute top-3 left-3 right-3 z-[60]">
+            <div className="glass-elevated p-3 flex flex-col gap-2 text-white">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h1 className="text-sm font-bold tracking-wide">URBAN PINN</h1>
+                  <p className="text-[10px] text-space-400">CFD Simulator</p>
+                </div>
+                <button
+                  onClick={() => setIsFullscreen(false)}
+                  className="bg-white/5 hover:bg-white/15 p-2 rounded-full transition-colors border border-white/10"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                </button>
+              </div>
+              <div>
+                <label className="text-[9px] uppercase tracking-widest text-space-300 font-bold">
+                  Height: <span className="text-amber-400 text-sm ml-1">{sliceHeight}m</span>
+                </label>
+                <input
+                  type="range" min="0" max="120" step="5"
+                  value={sliceHeight}
+                  onChange={(e) => setSliceHeight(parseInt(e.target.value))}
+                  className="w-full h-1.5 bg-space-800 rounded-lg appearance-none cursor-pointer mt-1"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom bar — legends + metrics */}
+          <div className="absolute bottom-2 left-2 right-2 z-[60] flex flex-col gap-2">
+            {/* Color legends row */}
+            <div className="glass-elevated p-2.5 flex gap-4 text-white">
+              {/* Velocity */}
+              <div className="flex-1">
+                <div className="flex justify-between text-[8px] font-bold text-space-400 uppercase tracking-widest mb-0.5">
+                  <span>Velocity</span>
+                  <span>{peakGust.toFixed(1)} m/s</span>
+                </div>
+                <div className="h-1 w-full rounded-full bg-gradient-to-r from-sky-500 via-emerald-400 via-yellow-400 to-red-500"></div>
+              </div>
+              {/* Thermal */}
+              <div className="flex-1">
+                <div className="flex justify-between text-[8px] font-bold text-space-400 uppercase tracking-widest mb-0.5">
+                  <span>Thermal</span>
+                  <span className="text-red-400">{maxTemp !== -Infinity ? maxTemp.toFixed(1) : "0.0"}°</span>
+                </div>
+                <div className="h-1 w-full rounded-full bg-gradient-to-r from-blue-600 via-purple-500 via-red-500 via-yellow-400 to-white"></div>
+              </div>
+            </div>
+            {/* Metrics */}
+            <MetricsHUD data={windData} />
+          </div>
+
+          {loading && (
+            <div className="absolute bottom-28 left-4 text-xs text-amber-500 animate-pulse bg-space-950/80 px-3 py-1.5 rounded-full border border-amber-500/20 z-50">
+              Inferring...
+            </div>
+          )}
+        </div>
+      )}
 
     </main>
   );
 }
+
